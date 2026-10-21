@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>推し手帳 - シンプル推し活管理ノート</title>
+  <title>推し栞 - ミニマル推し活手帳</title>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,9 +94,7 @@
       color: #3f3f46;
       border: 1px solid var(--border-color);
     }
-    button.logout:hover {
-      background: #e4e4e7;
-    }
+    button.logout:hover { background: #e4e4e7; }
     button.secondary {
       background: #f4f4f5;
       color: #3f3f46;
@@ -110,10 +108,26 @@
       border-radius: 4px;
       border: 1px solid #fca5a5;
     }
-    button.delete-btn:hover {
-      background: #dc2626;
-      color: white;
+    button.delete-btn:hover { background: #dc2626; color: white; }
+
+    /* いいなボタン */
+    button.like-btn {
+      background: #ffffff;
+      color: #71717a;
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      font-size: 12px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
+    button.like-btn:hover {
+      background: #f4f4f5;
+      color: #e11d48;
+      border-color: #f43f5e;
+    }
+
     .hidden { display: none !important; }
 
     /* フォーム */
@@ -182,7 +196,7 @@
     }
     li:last-child { border-bottom: none; }
 
-    /* モノトーンピル型タブメニュー */
+    /* タブメニュー */
     .tab-menu {
       display: flex;
       gap: 4px;
@@ -273,6 +287,14 @@
       color: var(--text-sub);
       margin-bottom: 8px;
     }
+    .post-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #f4f4f5;
+    }
     .badge {
       background: #f4f4f5;
       color: #27272a;
@@ -294,20 +316,20 @@
 
   <!-- ロード画面 -->
   <div id="loading-screen">
-    <div class="app-title">推し手帳</div>
+    <div class="app-title">推し栞</div>
     <p style="color: var(--text-sub); font-size: 12px; margin-top: 8px;">読み込み中...</p>
     <div class="spinner"></div>
   </div>
 
   <div class="app-header">
-    <h1 class="app-title">推し手帳</h1>
-    <div class="app-subtitle">シンプル推し活管理ノート & 匿名ひろば</div>
+    <h1 class="app-title">推し栞</h1>
+    <div class="app-subtitle">ミニマル推し活手帳 & 匿名ひろば</div>
   </div>
 
   <!-- ログイン前画面 -->
   <div id="login-section" class="card hidden" style="text-align: center; padding: 36px 20px;">
-    <h2 style="margin-top: 0; font-size: 18px; font-weight: 600;">ようこそ 推し手帳 へ</h2>
-    <p style="color: var(--text-sub); font-size: 13px; margin-bottom: 24px;">推し活の記録やスケジュールの整理を、シンプルにまとめる場所。</p>
+    <h2 style="margin-top: 0; font-size: 18px; font-weight: 600;">ようこそ 推し栞 へ</h2>
+    <p style="color: var(--text-sub); font-size: 13px; margin-bottom: 24px;">推し活の記録やスケジュールの整理を、静かにシンプルにまとめる場所。</p>
     <button id="login-btn" style="width: 100%; max-width: 260px;">Googleでログイン</button>
   </div>
 
@@ -559,7 +581,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, getDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, getDoc, updateDoc, increment, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCMNWuczwSlFyUyB_GA6E8s0_5kX6OA6rY",
@@ -591,14 +613,13 @@
     const avatarPreview = document.getElementById('avatar-preview');
     const editAvatarPreview = document.getElementById('edit-avatar-preview');
 
-    // 💡 画像自動圧縮関数（Max 200px）
     function resizeAndCompressImage(file, callback) {
       const reader = new FileReader();
       reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
-          const maxDim = 200; // 直径200pxに自動縮小
+          const maxDim = 200;
           let width = img.width;
           let height = img.height;
 
@@ -617,14 +638,13 @@
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          callback(canvas.toDataURL('image/jpeg', 0.8)); // 80%品質jpeg
+          callback(canvas.toDataURL('image/jpeg', 0.8));
         };
         img.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }
 
-    // 初回登録時の画像読み込み
     document.getElementById('setup-avatar-file').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -635,7 +655,6 @@
       }
     });
 
-    // プロフィール変更時の画像読み込み
     document.getElementById('edit-avatar-file').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -676,7 +695,6 @@
       }
     });
 
-    // 初回プロフ保存
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const saveBtn = document.getElementById('setup-save-btn');
@@ -705,7 +723,6 @@
       }
     });
 
-    // プロフィール編集モーダルを開く
     document.getElementById('edit-profile-btn').addEventListener('click', () => {
       document.getElementById('edit-nickname').value = userProfile.nickname || '';
       document.getElementById('edit-age').value = userProfile.age || '20代';
@@ -718,7 +735,6 @@
       profileEditModal.classList.add('hidden');
     };
 
-    // プロフィール更新実行
     document.getElementById('profile-edit-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const saveBtn = document.getElementById('edit-save-btn');
@@ -904,7 +920,7 @@
         `);
       }));
 
-      // 4. ひろば
+      // 4. ひろば（いいな機能付き）
       const qPosts = query(collection(db, "public_posts"), orderBy("createdAt", "desc"));
       unsubscribes.push(onSnapshot(qPosts, (snapshot) => {
         const postsEl = document.getElementById('posts-list');
@@ -920,6 +936,7 @@
           
           const isMyPost = data.authorId === userId;
           const deleteBtnHtml = isMyPost ? `<button class="delete-btn" onclick="deletePublicPost('${docSnap.id}')">削除</button>` : '';
+          const likeCount = data.likes || 0;
 
           div.innerHTML = `
             <div class="post-header">
@@ -931,6 +948,9 @@
               <span>${deleteBtnHtml}</span>
             </div>
             <div style="font-size:13px; line-height:1.5; white-space:pre-wrap;">${escapeHTML(data.message)}</div>
+            <div class="post-footer">
+              <button class="like-btn" onclick="addLike('${docSnap.id}')">❤️ いいな <span>${likeCount}</span></button>
+            </div>
           `;
           postsEl.appendChild(div);
         });
@@ -979,10 +999,23 @@
         age: userProfile.age,
         nickname: userProfile.nickname,
         message: document.getElementById('post-message').value,
+        likes: 0,
         createdAt: serverTimestamp()
       });
       document.getElementById('post-message').value = '';
     });
+
+    // 💡 いいな（❤️）カウント機能
+    window.addLike = async function(postId) {
+      try {
+        const postRef = doc(db, "public_posts", postId);
+        await updateDoc(postRef, {
+          likes: increment(1)
+        });
+      } catch (err) {
+        console.error("いいな追加失敗:", err);
+      }
+    };
 
     window.deleteItem = async function(colName, docId) {
       if (confirm("本当に削除しますか？")) {
