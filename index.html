@@ -8,7 +8,7 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       max-width: 600px;
-      margin: 30px auto;
+      margin: 20px auto;
       padding: 0 16px;
       background-color: #f9f9fb;
       color: #333;
@@ -31,48 +31,34 @@
       color: white;
       border: none;
       border-radius: 6px;
-      padding: 10px 20px;
+      padding: 8px 16px;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #d81b60;
+    button:hover { background-color: #d81b60; }
+    button.logout { background-color: #757575; }
+    button.delete-btn {
+      background-color: #ff5252;
+      padding: 4px 8px;
+      font-size: 12px;
+      margin-left: 8px;
     }
-    button.logout {
-      background-color: #757575;
-    }
-    .hidden {
-      display: none;
-    }
-    /* フォーム用スタイル */
-    .form-group {
-      margin-bottom: 12px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 4px;
-      font-weight: bold;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    /* グッズリスト用スタイル */
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      justify-content: space-between;
-    }
+    button.delete-btn:hover { background-color: #e03e3e; }
+    .hidden { display: none; }
+    
+    /* フォームとリスト */
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 14px; margin-bottom: 4px; font-weight: bold; }
+    .form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+    
+    /* タブ切替UI */
+    .tab-menu { display: flex; gap: 8px; margin-top: 16px; border-bottom: 2px solid #ddd; }
+    .tab-btn { background: none; color: #666; border: none; padding: 8px 12px; border-radius: 0; font-weight: bold; }
+    .tab-btn.active { color: #e91e63; border-bottom: 3px solid #e91e63; }
+    .total-amount { font-size: 20px; font-weight: bold; color: #e91e63; margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -93,52 +79,88 @@
       <button id="logout-btn" class="logout">ログアウト</button>
     </div>
 
-    <!-- 📦 グッズ登録フォーム -->
-    <div class="card">
-      <h3>📦 グッズ登録</h3>
-      <form id="goods-form">
-        <div class="form-group">
-          <label for="goods-name">グッズ名</label>
-          <input type="text" id="goods-name" placeholder="例：アクスタ" required>
-        </div>
-        <div class="form-group">
-          <label for="goods-price">価格 (円)</label>
-          <input type="number" id="goods-price" placeholder="例：1500" required>
-        </div>
-        <button type="submit">グッズを追加</button>
-      </form>
+    <!-- メニュータブ -->
+    <div class="tab-menu">
+      <button class="tab-btn active" onclick="switchTab('goods')">📦 グッズ</button>
+      <button class="tab-btn" onclick="switchTab('money')">💰 お金</button>
+      <button class="tab-btn" onclick="switchTab('calendar')">📅 カレンダー</button>
     </div>
 
-    <!-- 📋 グッズ一覧リスト -->
-    <div class="card">
-      <h3>📋 登録したグッズ</h3>
-      <ul id="goods-list">
-        <li>読み込み中...</li>
-      </ul>
+    <!-- 1. グッズ管理タブ -->
+    <div id="tab-goods" class="tab-content">
+      <div class="card">
+        <h3>📦 グッズ登録</h3>
+        <form id="goods-form">
+          <div class="form-group">
+            <label>グッズ名</label>
+            <input type="text" id="goods-name" placeholder="例：アクスタ" required>
+          </div>
+          <div class="form-group">
+            <label>価格 (円)</label>
+            <input type="number" id="goods-price" placeholder="例：1500" required>
+          </div>
+          <button type="submit">追加する</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>📋 登録したグッズ一覧</h3>
+        <ul id="goods-list"><li>読み込み中...</li></ul>
+      </div>
     </div>
+
+    <!-- 2. お金の管理タブ -->
+    <div id="tab-money" class="tab-content hidden">
+      <div class="card">
+        <h3>💰 推し活出費の記録</h3>
+        <div class="total-amount">合計: ￥<span id="total-money">0</span></div>
+        <form id="money-form" style="margin-top: 16px;">
+          <div class="form-group">
+            <label>用途</label>
+            <input type="text" id="money-title" placeholder="例：ライブチケット代" required>
+          </div>
+          <div class="form-group">
+            <label>金額 (円)</label>
+            <input type="number" id="money-amount" placeholder="例：8500" required>
+          </div>
+          <button type="submit">記録する</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>📋 出費履歴</h3>
+        <ul id="money-list"><li>読み込み中...</li></ul>
+      </div>
+    </div>
+
+    <!-- 3. カレンダータブ -->
+    <div id="tab-calendar" class="tab-content hidden">
+      <div class="card">
+        <h3>📅 予定の登録</h3>
+        <form id="schedule-form">
+          <div class="form-group">
+            <label>日付</label>
+            <input type="date" id="schedule-date" required>
+          </div>
+          <div class="form-group">
+            <label>イベント名・予定</label>
+            <input type="text" id="schedule-title" placeholder="例：全国ツアー初日" required>
+          </div>
+          <button type="submit">予定を追加</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>📋 予定一覧</h3>
+        <ul id="schedule-list"><li>読み込み中...</li></ul>
+      </div>
+    </div>
+
   </div>
 
   <!-- Firebase SDK の読み込み -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { 
-      getAuth, 
-      GoogleAuthProvider, 
-      signInWithPopup, 
-      signOut, 
-      onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { 
-      getFirestore, 
-      collection, 
-      addDoc, 
-      onSnapshot, 
-      query, 
-      orderBy,
-      serverTimestamp 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // 1. Firebase設定
     const firebaseConfig = {
       apiKey: "AIzaSyCMNWuczwSlFyUyB_GA6E8s0_5kX6OA6rY",
       authDomain: "oshikanri-47bbb.firebaseapp.com",
@@ -148,128 +170,139 @@
       appId: "1:178705245984:web:74f49d610c4f91348dd945"
     };
 
-    // 2. 初期化
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
 
+    let currentUser = null;
+    let unsubscribes = [];
+
     // DOM要素
     const loginSection = document.getElementById('login-section');
     const appSection = document.getElementById('app-section');
     const userNameEl = document.getElementById('user-name');
-    const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const goodsForm = document.getElementById('goods-form');
-    const goodsNameInput = document.getElementById('goods-name');
-    const goodsPriceInput = document.getElementById('goods-price');
-    const goodsListEl = document.getElementById('goods-list');
 
-    let currentUser = null;
-    let unsubscribe = null; // リアルタイム監視の解除用
-
-    // 3. ログイン処理
-    loginBtn.addEventListener('click', async () => {
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (error) {
-        console.error("ログインエラー:", error);
-        alert("ログインエラーが発生しました:\n" + error.message);
-      }
+    document.getElementById('login-btn').addEventListener('click', () => signInWithPopup(auth, provider));
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      unsubscribes.forEach(unsub => unsub());
+      signOut(auth);
     });
 
-    // 4. ログアウト処理
-    logoutBtn.addEventListener('click', async () => {
-      try {
-        if (unsubscribe) unsubscribe(); // 監視を解除
-        await signOut(auth);
-      } catch (error) {
-        console.error("ログアウトエラー:", error);
-      }
-    });
-
-    // 5. 状態監視（ログイン時の処理）
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
       if (user) {
         userNameEl.textContent = user.displayName || "ユーザー";
         loginSection.classList.add('hidden');
         appSection.classList.remove('hidden');
-        
-        // ユーザー固有のFirestoreデータを読み込む
-        loadUserGoods(user.uid);
+        loadAllData(user.uid);
       } else {
         loginSection.classList.remove('hidden');
         appSection.classList.add('hidden');
-        goodsListEl.innerHTML = '';
       }
     });
 
-    // 6. グッズの追加処理 (Firestoreへの書き込み)
-    goodsForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!currentUser) return;
+    // タブ切替処理
+    window.switchTab = function(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+      event.target.classList.add('active');
+    };
 
-      const name = goodsNameInput.value;
-      const price = Number(goodsPriceInput.value);
+    // --- データ全読み込み ---
+    function loadAllData(userId) {
+      unsubscribes.forEach(unsub => unsub());
+      unsubscribes = [];
 
-      try {
-        // users/{userId}/goods コレクションに保存
-        await addDoc(collection(db, "users", currentUser.uid, "goods"), {
-          name: name,
-          price: price,
-          createdAt: serverTimestamp()
-        });
+      // グッズ読み込み
+      const qGoods = query(collection(db, "users", userId, "goods"), orderBy("createdAt", "desc"));
+      unsubscribes.push(onSnapshot(qGoods, (snapshot) => {
+        renderList('goods-list', snapshot, (data, id) => `
+          <span><strong>${escapeHTML(data.name)}</strong> - ￥${data.price.toLocaleString()}</span>
+          <button class="delete-btn" onclick="deleteItem('goods', '${id}')">削除</button>
+        `);
+      }));
 
-        // フォームをリセット
-        goodsForm.reset();
-      } catch (error) {
-        console.error("データ追加エラー:", error);
-        alert("保存に失敗しました: " + error.message);
-      }
-    });
-
-    // 7. グッズ一覧の読み込み (Firestoreからのリアルタイム読み込み)
-    function loadUserGoods(userId) {
-      // 日付の新しい順で取得
-      const q = query(
-        collection(db, "users", userId, "goods"), 
-        orderBy("createdAt", "desc")
-      );
-
-      // onSnapshot でデータの変更を自動検知
-      unsubscribe = onSnapshot(q, (snapshot) => {
-        goodsListEl.innerHTML = '';
-        if (snapshot.empty) {
-          goodsListEl.innerHTML = '<li>登録されたグッズはありません</li>';
-          return;
-        }
-
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const li = document.createElement('li');
-          li.innerHTML = `
-            <span><strong>${escapeHTML(data.name)}</strong></span>
-            <span>￥${data.price ? data.price.toLocaleString() : 0}</span>
+      // お金読み込み
+      const qMoney = query(collection(db, "users", userId, "expenses"), orderBy("createdAt", "desc"));
+      unsubscribes.push(onSnapshot(qMoney, (snapshot) => {
+        let total = 0;
+        renderList('money-list', snapshot, (data, id) => {
+          total += data.amount || 0;
+          return `
+            <span><strong>${escapeHTML(data.title)}</strong> - ￥${data.amount.toLocaleString()}</span>
+            <button class="delete-btn" onclick="deleteItem('expenses', '${id}')">削除</button>
           `;
-          goodsListEl.appendChild(li);
         });
-      }, (error) => {
-        console.error("データ読み込みエラー:", error);
+        document.getElementById('total-money').textContent = total.toLocaleString();
+      }));
+
+      // カレンダー（予定）読み込み
+      const qSchedule = query(collection(db, "users", userId, "schedules"), orderBy("date", "asc"));
+      unsubscribes.push(onSnapshot(qSchedule, (snapshot) => {
+        renderList('schedule-list', snapshot, (data, id) => `
+          <span><strong>${data.date}</strong> : ${escapeHTML(data.title)}</span>
+          <button class="delete-btn" onclick="deleteItem('schedules', '${id}')">削除</button>
+        `);
+      }));
+    }
+
+    // --- 汎用リスト描画関数 ---
+    function renderList(elementId, snapshot, templateFunc) {
+      const el = document.getElementById(elementId);
+      el.innerHTML = '';
+      if (snapshot.empty) {
+        el.innerHTML = '<li>データがありません</li>';
+        return;
+      }
+      snapshot.forEach(doc => {
+        const li = document.createElement('li');
+        li.innerHTML = templateFunc(doc.data(), doc.id);
+        el.appendChild(li);
       });
     }
 
-    // XSS対策用テキストエスケープ関数
+    // --- データ追加処理 ---
+    document.getElementById('goods-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await addDoc(collection(db, "users", currentUser.uid, "goods"), {
+        name: document.getElementById('goods-name').value,
+        price: Number(document.getElementById('goods-price').value),
+        createdAt: serverTimestamp()
+      });
+      e.target.reset();
+    });
+
+    document.getElementById('money-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await addDoc(collection(db, "users", currentUser.uid, "expenses"), {
+        title: document.getElementById('money-title').value,
+        amount: Number(document.getElementById('money-amount').value),
+        createdAt: serverTimestamp()
+      });
+      e.target.reset();
+    });
+
+    document.getElementById('schedule-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await addDoc(collection(db, "users", currentUser.uid, "schedules"), {
+        date: document.getElementById('schedule-date').value,
+        title: document.getElementById('schedule-title').value,
+        createdAt: serverTimestamp()
+      });
+      e.target.reset();
+    });
+
+    // --- データ削除処理（加点要件対応） ---
+    window.deleteItem = async function(colName, docId) {
+      if (confirm("本当に削除しますか？")) {
+        await deleteDoc(doc(db, "users", currentUser.uid, colName, docId));
+      }
+    };
+
     function escapeHTML(str) {
-      return str.replace(/[&<>'"]/g, 
-        tag => ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          "'": '&#39;',
-          '"': '&quot;'
-        }[tag] || tag)
-      );
+      return str.replace(/[&<>'"]/g, tag => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[tag]||tag));
     }
   </script>
 </body>
