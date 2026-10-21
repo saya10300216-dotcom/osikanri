@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OshiNote - ミニマル推し活管理ノート</title>
+  <title>推し手帳 - シンプル推し活管理ノート</title>
   
   <!-- Google Fonts (Inter & Noto Sans JP) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,21 +16,21 @@
 
   <style>
     :root {
-      --primary-color: #2b2b2b;
-      --primary-hover: #111111;
-      --accent-color: #4a5568;
-      --bg-color: #f7f8fa;
+      --primary-color: #18181b;
+      --primary-hover: #09090b;
+      --accent-color: #3f3f46;
+      --bg-color: #f4f4f5;
       --card-bg: #ffffff;
-      --border-color: #e2e8f0;
-      --text-main: #1a202c;
-      --text-sub: #718096;
-      --radius-md: 12px;
-      --radius-sm: 8px;
+      --border-color: #e4e4e7;
+      --text-main: #18181b;
+      --text-sub: #71717a;
+      --radius-md: 10px;
+      --radius-sm: 6px;
     }
 
     body {
       font-family: 'Inter', 'Noto Sans JP', -apple-system, sans-serif;
-      max-width: 720px;
+      max-width: 700px;
       margin: 0 auto;
       padding: 24px 16px 40px;
       background-color: var(--bg-color);
@@ -38,15 +38,14 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ヘッダーデザイン */
+    /* ヘッダー */
     .app-header {
       text-align: center;
       margin-bottom: 24px;
     }
     .app-title {
-      font-family: 'Inter', sans-serif;
       color: var(--text-main);
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
       margin: 0;
       letter-spacing: -0.5px;
@@ -57,14 +56,13 @@
       margin-top: 4px;
     }
 
-    /* カードコンテナ */
+    /* カード */
     .card {
       background: var(--card-bg);
       border-radius: var(--radius-md);
       padding: 20px;
       margin-top: 16px;
       border: 1px solid var(--border-color);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
     .card h3 {
       font-size: 15px;
@@ -76,7 +74,7 @@
       gap: 6px;
     }
 
-    /* ボタンデザイン */
+    /* ボタン */
     button {
       background: var(--primary-color);
       color: white;
@@ -92,31 +90,33 @@
       background: var(--primary-hover);
     }
     button.logout {
-      background: #edf2f7;
-      color: #4a5568;
+      background: #f4f4f5;
+      color: #3f3f46;
+      border: 1px solid var(--border-color);
     }
     button.logout:hover {
-      background: #e2e8f0;
+      background: #e4e4e7;
     }
     button.secondary {
-      background: #edf2f7;
-      color: #4a5568;
+      background: #f4f4f5;
+      color: #3f3f46;
+      border: 1px solid var(--border-color);
     }
     button.delete-btn {
-      background: #fff5f5;
-      color: #e53e3e;
+      background: #ffffff;
+      color: #dc2626;
       padding: 4px 8px;
       font-size: 11px;
       border-radius: 4px;
-      border: 1px solid #fed7d7;
+      border: 1px solid #fca5a5;
     }
     button.delete-btn:hover {
-      background: #e53e3e;
+      background: #dc2626;
       color: white;
     }
     .hidden { display: none !important; }
 
-    /* フォーム要素 */
+    /* フォーム */
     .form-group { margin-bottom: 14px; }
     .form-group label {
       display: block;
@@ -141,14 +141,14 @@
       border-color: var(--primary-color);
     }
 
-    /* アイコンプレビュー */
+    /* アバター画像 */
     .avatar-circle {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       object-fit: cover;
       border: 1px solid var(--border-color);
-      background: #edf2f7;
+      background: #f4f4f5;
       display: inline-block;
       vertical-align: middle;
     }
@@ -164,7 +164,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #f8fafc;
+      background: #fafafa;
       padding: 12px 16px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-color);
@@ -174,7 +174,7 @@
     ul { list-style: none; padding: 0; margin: 0; }
     li {
       padding: 12px 0;
-      border-bottom: 1px solid #edf2f7;
+      border-bottom: 1px solid #f4f4f5;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -188,7 +188,7 @@
       gap: 4px;
       margin-top: 20px;
       padding: 4px;
-      background: #edf2f7;
+      background: #e4e4e7;
       border-radius: 24px;
       overflow-x: auto;
     }
@@ -206,7 +206,7 @@
     .tab-btn.active {
       background: var(--card-bg);
       color: var(--text-main);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
     }
 
     /* ロード画面 */
@@ -216,8 +216,8 @@
       display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
     }
     .spinner {
-      width: 32px; height: 32px;
-      border: 3px solid #edf2f7;
+      width: 28px; height: 28px;
+      border: 3px solid #f4f4f5;
       border-top: 3px solid var(--primary-color);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
@@ -225,7 +225,7 @@
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* ダッシュボードサマリー */
+    /* ダッシュボード */
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -233,7 +233,7 @@
       margin-top: 10px;
     }
     .summary-card {
-      background: #f8fafc;
+      background: #fafafa;
       padding: 14px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-color);
@@ -274,52 +274,53 @@
       margin-bottom: 8px;
     }
     .badge {
-      background: #edf2f7;
-      color: #2d3748;
+      background: #f4f4f5;
+      color: #27272a;
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 11px;
       font-weight: 600;
+      border: 1px solid var(--border-color);
     }
 
     /* FullCalendar */
     #calendar { max-width: 100%; margin: 0 auto; }
     .fc-toolbar-title { font-size: 14px !important; font-weight: 600; color: var(--text-main); }
     .fc-button-primary { background: var(--primary-color) !important; border: none !important; border-radius: 6px !important; }
-    .fc-daygrid-day:hover { background-color: #f7fafc; }
+    .fc-daygrid-day:hover { background-color: #fafafa; }
   </style>
 </head>
 <body>
 
   <!-- ロード画面 -->
   <div id="loading-screen">
-    <div class="app-title" style="font-size: 32px;">OshiNote</div>
+    <div class="app-title">推し手帳</div>
     <p style="color: var(--text-sub); font-size: 12px; margin-top: 8px;">読み込み中...</p>
     <div class="spinner"></div>
   </div>
 
   <div class="app-header">
-    <h1 class="app-title">OshiNote</h1>
-    <div class="app-subtitle">ミニマル推し活管理ノート & 匿名ひろば</div>
+    <h1 class="app-title">推し手帳</h1>
+    <div class="app-subtitle">シンプル推し活管理ノート & 匿名ひろば</div>
   </div>
 
   <!-- ログイン前画面 -->
   <div id="login-section" class="card hidden" style="text-align: center; padding: 36px 20px;">
-    <h2 style="margin-top: 0; font-size: 18px; font-weight: 600;">ようこそ OshiNote へ</h2>
+    <h2 style="margin-top: 0; font-size: 18px; font-weight: 600;">ようこそ 推し手帳 へ</h2>
     <p style="color: var(--text-sub); font-size: 13px; margin-bottom: 24px;">推し活の記録やスケジュールの整理を、シンプルにまとめる場所。</p>
     <button id="login-btn" style="width: 100%; max-width: 260px;">Googleでログイン</button>
   </div>
 
   <!-- 初回プロフィール設定画面 -->
   <div id="profile-setup-section" class="card hidden">
-    <h3>👤 プロフィール設定</h3>
-    <p style="font-size: 12px; color: var(--text-sub);">画像とプロフィールを設定してください（後から変更可能）。</p>
+    <h3>プロフィール設定</h3>
+    <p style="font-size: 12px; color: var(--text-sub);">フォルダ内の画像とプロフィールを設定してください（後から変更可能）。</p>
     <form id="profile-form">
       <div class="form-group">
-        <label>アイコン画像</label>
+        <label>アイコン画像を選択</label>
         <input type="file" id="setup-avatar-file" accept="image/*">
         <div class="avatar-preview-box">
-          <img id="avatar-preview" class="avatar-circle" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='%23a0aec0'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/></svg>" alt="preview">
+          <img id="avatar-preview" class="avatar-circle" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='%23a1a1aa'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/></svg>" alt="preview">
           <span style="font-size: 12px; color: var(--text-sub);">選択した画像がプレビューされます</span>
         </div>
       </div>
@@ -351,7 +352,10 @@
             <div style="font-size: 11px; color: var(--text-sub);" id="user-age-display">20代</div>
           </div>
         </div>
-        <button id="logout-btn" class="logout" style="padding: 6px 12px; font-size: 12px;">ログアウト</button>
+        <div style="display: flex; gap: 6px;">
+          <button id="edit-profile-btn" class="secondary" style="padding: 6px 10px; font-size: 11px;">編集</button>
+          <button id="logout-btn" class="logout" style="padding: 6px 10px; font-size: 11px;">ログアウト</button>
+        </div>
       </div>
 
       <!-- モード切り替えスイッチ -->
@@ -366,18 +370,18 @@
 
     <!-- メニュータブ -->
     <div class="tab-menu">
-      <button class="tab-btn active" onclick="switchTab('home')">🏠 ホーム</button>
-      <button class="tab-btn" onclick="switchTab('oshi')">⭐ 推しメモ</button>
-      <button class="tab-btn" onclick="switchTab('goods')">📦 グッズ</button>
-      <button class="tab-btn" onclick="switchTab('money')">💰 お金</button>
-      <button class="tab-btn" onclick="switchTab('calendar')">📅 カレンダー</button>
-      <button class="tab-btn" id="tab-community-btn" onclick="switchTab('community')">💬 ひろば</button>
+      <button class="tab-btn active" onclick="switchTab('home')">ホーム</button>
+      <button class="tab-btn" onclick="switchTab('oshi')">推しメモ</button>
+      <button class="tab-btn" onclick="switchTab('goods')">グッズ</button>
+      <button class="tab-btn" onclick="switchTab('money')">出費</button>
+      <button class="tab-btn" onclick="switchTab('calendar')">予定</button>
+      <button class="tab-btn" id="tab-community-btn" onclick="switchTab('community')">ひろば</button>
     </div>
 
-    <!-- 🏠 1. ホーム -->
+    <!-- 1. ホーム -->
     <div id="tab-home" class="tab-content">
       <div class="card">
-        <h3>🏠 今月のダッシュボード</h3>
+        <h3>今月のサマリー</h3>
         <div class="summary-grid">
           <div class="summary-card">
             <h4>今月の推し活出費</h4>
@@ -390,37 +394,37 @@
         </div>
       </div>
       <div class="card">
-        <h3>📅 直近の予定</h3>
+        <h3>直近の予定</h3>
         <ul id="home-schedule-list"><li>読み込み中...</li></ul>
       </div>
     </div>
 
-    <!-- ⭐ 2. 推しメモ（新規追加機能） -->
+    <!-- 2. 推しメモ -->
     <div id="tab-oshi" class="tab-content hidden">
       <div class="card">
-        <h3>⭐ 推しプロフィール & メモ</h3>
+        <h3>推しプロフィール & メモ</h3>
         <form id="oshi-profile-form">
           <div class="form-group">
             <label>推しの名前 / グループ名</label>
-            <input type="text" id="oshi-name" placeholder="例：〇〇くん / 〇〇グループ">
+            <input type="text" id="oshi-name" placeholder="例：名前やグループ名">
           </div>
           <div class="form-group">
-            <label>記念日（結成日・誕生日・出会った日など）</label>
+            <label>記念日（結成日・誕生日など）</label>
             <input type="date" id="oshi-anniversary">
           </div>
           <div class="form-group">
-            <label>自由メモ（おすすめ曲、参戦履歴、参戦方針など）</label>
-            <textarea id="oshi-memo" rows="4" placeholder="例：参戦服の傾向、好きな曲トップ3、次回遠征計画メモなど"></textarea>
+            <label>自由メモ（参戦履歴・好きな曲・感想など）</label>
+            <textarea id="oshi-memo" rows="4" placeholder="例：参戦服、おすすめ曲、次回遠征計画メモなど"></textarea>
           </div>
           <button type="submit" style="width: 100%;">推しメモを更新</button>
         </form>
       </div>
     </div>
 
-    <!-- 📦 3. グッズ -->
+    <!-- 3. グッズ -->
     <div id="tab-goods" class="tab-content hidden">
       <div class="card">
-        <h3>📦 グッズ登録</h3>
+        <h3>グッズ登録</h3>
         <form id="goods-form">
           <div class="form-group">
             <label>グッズ名</label>
@@ -434,15 +438,15 @@
         </form>
       </div>
       <div class="card">
-        <h3>📋 登録したグッズ一覧</h3>
+        <h3>登録したグッズ一覧</h3>
         <ul id="goods-list"><li>読み込み中...</li></ul>
       </div>
     </div>
 
-    <!-- 💰 4. お金 -->
+    <!-- 4. 出費 -->
     <div id="tab-money" class="tab-content hidden">
       <div class="card">
-        <h3>💰 推し活出費の記録</h3>
+        <h3>推し活出費の記録</h3>
         <div style="font-size: 20px; font-weight: 700; color: var(--text-main); margin: 6px 0 14px;">
           合計: ￥<span id="total-money">0</span>
         </div>
@@ -459,24 +463,24 @@
         </form>
       </div>
       <div class="card">
-        <h3>📋 出費履歴</h3>
+        <h3>出費履歴</h3>
         <ul id="money-list"><li>読み込み中...</li></ul>
       </div>
     </div>
 
-    <!-- 📅 5. カレンダー -->
+    <!-- 5. 予定 -->
     <div id="tab-calendar" class="tab-content hidden">
       <div class="card">
-        <h3>📅 予定カレンダー</h3>
+        <h3>予定カレンダー</h3>
         <p style="font-size: 11px; color: var(--text-sub); margin-bottom: 12px;">日付をクリックすると予定を追加できます。</p>
         <div id="calendar"></div>
       </div>
     </div>
 
-    <!-- 💬 6. ひろば -->
+    <!-- 6. ひろば -->
     <div id="tab-community" class="tab-content hidden">
       <div class="card">
-        <h3>💬 同年代ひろば（共有モード）</h3>
+        <h3>同年代ひろば（共有モード）</h3>
         <p style="font-size: 11px; color: var(--text-sub); margin-bottom: 12px;">登録したアイコンと年代で匿名投稿されます。</p>
         
         <form id="post-form">
@@ -489,21 +493,55 @@
       </div>
 
       <div class="card">
-        <h3>💬 最新の投稿一覧</h3>
+        <h3>最新の投稿一覧</h3>
         <div id="posts-list">読み込み中...</div>
       </div>
     </div>
 
   </div>
 
+  <!-- プロフィール編集モーダル -->
+  <div id="profile-edit-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 style="margin-top: 0;">プロフィール変更</h3>
+      <form id="profile-edit-form">
+        <div class="form-group">
+          <label>新しいアイコン画像</label>
+          <input type="file" id="edit-avatar-file" accept="image/*">
+          <div class="avatar-preview-box">
+            <img id="edit-avatar-preview" class="avatar-circle" src="" alt="preview">
+            <span style="font-size: 11px; color: var(--text-sub);">新しい画像を選択（未選択なら変更なし）</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>ニックネーム</label>
+          <input type="text" id="edit-nickname" required>
+        </div>
+        <div class="form-group">
+          <label>年代</label>
+          <select id="edit-age" required>
+            <option value="10代">10代</option>
+            <option value="20代">20代</option>
+            <option value="30代">30代</option>
+            <option value="40代以上">40代以上</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
+          <button type="button" class="secondary" onclick="closeProfileModal()">キャンセル</button>
+          <button type="submit">更新する</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- 予定追加モーダル -->
   <div id="schedule-modal" class="modal-overlay hidden">
     <div class="modal-content">
-      <h3 style="margin-top: 0;">📅 予定を追加</h3>
+      <h3 style="margin-top: 0;">予定を追加</h3>
       <form id="modal-schedule-form">
         <div class="form-group">
           <label>日付</label>
-          <input type="date" id="modal-schedule-date" required readonly style="background:#f8fafc;">
+          <input type="date" id="modal-schedule-date" required readonly style="background:#f4f4f5;">
         </div>
         <div class="form-group">
           <label>予定・イベント名</label>
@@ -542,15 +580,18 @@
     let unsubscribes = [];
     let calendar = null;
     let base64Avatar = "";
+    let editBase64Avatar = "";
 
     const loadingScreen = document.getElementById('loading-screen');
     const loginSection = document.getElementById('login-section');
     const profileSetupSection = document.getElementById('profile-setup-section');
     const appSection = document.getElementById('app-section');
     const scheduleModal = document.getElementById('schedule-modal');
+    const profileEditModal = document.getElementById('profile-edit-modal');
     const avatarPreview = document.getElementById('avatar-preview');
+    const editAvatarPreview = document.getElementById('edit-avatar-preview');
 
-    // 画像ファイル選択時のBase64変換 & プレビュー表示
+    // 初回登録時の画像読み込み
     document.getElementById('setup-avatar-file').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -563,13 +604,25 @@
       }
     });
 
+    // プロフィール変更時の画像読み込み
+    document.getElementById('edit-avatar-file').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          editBase64Avatar = evt.target.result;
+          editAvatarPreview.src = editBase64Avatar;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
     document.getElementById('login-btn').addEventListener('click', () => signInWithPopup(auth, provider));
     document.getElementById('logout-btn').addEventListener('click', () => {
       unsubscribes.forEach(unsub => unsub());
       signOut(auth);
     });
 
-    // 認証状態の監視
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       loadingScreen.classList.add('hidden');
@@ -590,7 +643,6 @@
       }
     });
 
-    // プロフィール登録保存
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const nickname = document.getElementById('setup-nickname').value;
@@ -606,6 +658,34 @@
       await setDoc(doc(db, "users", currentUser.uid, "profile", "info"), userProfile);
       profileSetupSection.classList.add('hidden');
       showAppMain();
+    });
+
+    // プロフィール編集モーダルを開く
+    document.getElementById('edit-profile-btn').addEventListener('click', () => {
+      document.getElementById('edit-nickname').value = userProfile.nickname || '';
+      document.getElementById('edit-age').value = userProfile.age || '20代';
+      editAvatarPreview.src = userProfile.avatar || '';
+      editBase64Avatar = ""; // リセット
+      profileEditModal.classList.remove('hidden');
+    });
+
+    window.closeProfileModal = function() {
+      profileEditModal.classList.add('hidden');
+    };
+
+    // プロフィール更新実行
+    document.getElementById('profile-edit-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      userProfile.nickname = document.getElementById('edit-nickname').value;
+      userProfile.age = document.getElementById('edit-age').value;
+      if (editBase64Avatar) {
+        userProfile.avatar = editBase64Avatar;
+      }
+
+      await setDoc(doc(db, "users", currentUser.uid, "profile", "info"), userProfile);
+      closeProfileModal();
+      updateProfileUI();
+      alert("プロフィールを更新しました");
     });
 
     function showAppMain() {
@@ -688,7 +768,6 @@
       closeScheduleModal();
     });
 
-    // 推しメモ読み込み & 保存
     async function loadOshiMemo() {
       const docSnap = await getDoc(doc(db, "users", currentUser.uid, "oshi_info", "data"));
       if (docSnap.exists()) {
@@ -707,7 +786,7 @@
         memo: document.getElementById('oshi-memo').value,
         updatedAt: serverTimestamp()
       });
-      alert("推しメモを保存しました！");
+      alert("推しメモを更新しました");
     });
 
     function loadAllData(userId) {
@@ -751,7 +830,7 @@
               title: data.title,
               start: data.date,
               allDay: true,
-              color: '#2b2b2b'
+              color: '#18181b'
             });
           });
         }
