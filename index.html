@@ -11,16 +11,21 @@
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
   <style>
+    :root {
+      --primary-color: #e91e63;
+      --primary-hover: #d81b60;
+      --bg-color: #f9f9fb;
+    }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       max-width: 700px;
-      margin: 20px auto;
-      padding: 0 16px;
-      background-color: #f9f9fb;
+      margin: 0 auto;
+      padding: 20px 16px;
+      background-color: var(--bg-color);
       color: #333;
     }
     h1 {
-      color: #e91e63;
+      color: var(--primary-color);
       font-size: 24px;
       margin-bottom: 8px;
     }
@@ -33,7 +38,7 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     button {
-      background-color: #e91e63;
+      background-color: var(--primary-color);
       color: white;
       border: none;
       border-radius: 6px;
@@ -42,8 +47,9 @@
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover { background-color: #d81b60; }
+    button:hover { background-color: var(--primary-hover); }
     button.logout { background-color: #757575; }
+    button.secondary { background-color: #9e9e9e; }
     button.delete-btn {
       background-color: #ff5252;
       padding: 4px 8px;
@@ -51,7 +57,7 @@
       margin-left: 8px;
     }
     button.delete-btn:hover { background-color: #e03e3e; }
-    .hidden { display: none; }
+    .hidden { display: none !important; }
     
     /* フォームとリスト */
     .form-group { margin-bottom: 12px; }
@@ -61,38 +67,88 @@
     li { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
     
     /* タブ切替UI */
-    .tab-menu { display: flex; gap: 8px; margin-top: 16px; border-bottom: 2px solid #ddd; }
-    .tab-btn { background: none; color: #666; border: none; padding: 8px 12px; border-radius: 0; font-weight: bold; }
-    .tab-btn.active { color: #e91e63; border-bottom: 3px solid #e91e63; }
-    .total-amount { font-size: 20px; font-weight: bold; color: #e91e63; margin-top: 8px; }
+    .tab-menu { display: flex; gap: 8px; margin-top: 16px; border-bottom: 2px solid #ddd; overflow-x: auto; }
+    .tab-btn { background: none; color: #666; border: none; padding: 8px 12px; border-radius: 0; font-weight: bold; white-space: nowrap; }
+    .tab-btn.active { color: var(--primary-color); border-bottom: 3px solid var(--primary-color); }
+    
+    /* 1. ロード画面（スプラッシュ画面） */
+    #loading-screen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-top: 16px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* FullCalendarカスタマイズ */
-    #calendar {
-      max-width: 100%;
-      margin: 0 auto;
+    /* 2. ホーム画面サマリーカード */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
     }
-    .fc-toolbar-title {
-      font-size: 16px !important;
-      color: #333;
+    .summary-card {
+      background: #fff5f8;
+      border-left: 4px solid var(--primary-color);
+      padding: 12px;
+      border-radius: 6px;
     }
-    .fc-button-primary {
-      background-color: #e91e63 !important;
-      border-color: #e91e63 !important;
+    .summary-card h4 { margin: 0; font-size: 12px; color: #666; }
+    .summary-card .val { font-size: 20px; font-weight: bold; color: var(--primary-color); margin-top: 4px; }
+
+    /* 3. モーダル画面（予定追加ポップアップ） */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-    .fc-daygrid-day {
-      cursor: pointer;
+    .modal-content {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .fc-daygrid-day:hover {
-      background-color: #fce4ec;
-    }
+
+    /* FullCalendar */
+    #calendar { max-width: 100%; margin: 0 auto; }
+    .fc-toolbar-title { font-size: 16px !important; color: #333; }
+    .fc-button-primary { background-color: var(--primary-color) !important; border-color: var(--primary-color) !important; }
+    .fc-daygrid-day { cursor: pointer; }
+    .fc-daygrid-day:hover { background-color: #fce4ec; }
   </style>
 </head>
 <body>
 
+  <!-- 🌸 1. ロード画面 -->
+  <div id="loading-screen">
+    <h1 style="font-size: 28px;">OshiBase 🌸</h1>
+    <p style="color: #666; font-size: 14px;">読み込み中...</p>
+    <div class="spinner"></div>
+  </div>
+
   <h1>OshiBase 🌸</h1>
 
   <!-- ログイン前画面 -->
-  <div id="login-section" class="card">
+  <div id="login-section" class="card hidden">
     <h2>ようこそ</h2>
     <p>自分だけの推し活ノート。まずはGoogleアカウントでログインしてください。</p>
     <button id="login-btn">Googleでログイン</button>
@@ -100,20 +156,42 @@
 
   <!-- ログイン後画面 -->
   <div id="app-section" class="hidden">
-    <div class="card">
-      <p>ようこそ、<strong id="user-name">ユーザー</strong> さん！</p>
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>ようこそ、<strong id="user-name">ユーザー</strong> さん！</div>
       <button id="logout-btn" class="logout">ログアウト</button>
     </div>
 
     <!-- メニュータブ -->
     <div class="tab-menu">
-      <button class="tab-btn active" onclick="switchTab('goods')">📦 グッズ</button>
+      <button class="tab-btn active" onclick="switchTab('home')">🏠 ホーム</button>
+      <button class="tab-btn" onclick="switchTab('goods')">📦 グッズ</button>
       <button class="tab-btn" onclick="switchTab('money')">💰 お金</button>
       <button class="tab-btn" onclick="switchTab('calendar')">📅 カレンダー</button>
     </div>
 
-    <!-- 1. グッズ管理タブ -->
-    <div id="tab-goods" class="tab-content">
+    <!-- 🏠 2. ホーム画面 -->
+    <div id="tab-home" class="tab-content">
+      <div class="card">
+        <h3>🏠 今月のダッシュボード</h3>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <h4>今月の推し活出費</h4>
+            <div class="val">￥<span id="home-total-money">0</span></div>
+          </div>
+          <div class="summary-card">
+            <h4>登録中のグッズ</h4>
+            <div class="val"><span id="home-goods-count">0</span> 個</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>📅 直近の予定</h3>
+        <ul id="home-schedule-list"><li>読み込み中...</li></ul>
+      </div>
+    </div>
+
+    <!-- 📦 グッズ管理タブ -->
+    <div id="tab-goods" class="tab-content hidden">
       <div class="card">
         <h3>📦 グッズ登録</h3>
         <form id="goods-form">
@@ -134,11 +212,13 @@
       </div>
     </div>
 
-    <!-- 2. お金の管理タブ -->
+    <!-- 💰 お金の管理タブ -->
     <div id="tab-money" class="tab-content hidden">
       <div class="card">
         <h3>💰 推し活出費の記録</h3>
-        <div class="total-amount">合計: ￥<span id="total-money">0</span></div>
+        <div style="font-size: 20px; font-weight: bold; color: var(--primary-color); margin-top: 8px;">
+          合計: ￥<span id="total-money">0</span>
+        </div>
         <form id="money-form" style="margin-top: 16px;">
           <div class="form-group">
             <label>用途</label>
@@ -157,15 +237,36 @@
       </div>
     </div>
 
-    <!-- 3. カレンダータブ -->
+    <!-- 📅 カレンダータブ -->
     <div id="tab-calendar" class="tab-content hidden">
       <div class="card">
         <h3>📅 予定カレンダー</h3>
-        <p style="font-size: 12px; color: #666; margin-bottom: 12px;">※日付のマスをクリックすると予定を追加できます。予定をクリックすると削除できます。</p>
+        <p style="font-size: 12px; color: #666; margin-bottom: 12px;">※カレンダーの日付をクリックすると予定入力画面が開きます。</p>
         <div id="calendar"></div>
       </div>
     </div>
 
+  </div>
+
+  <!-- 📝 3. 予定入力画面（モーダルダイアログ） -->
+  <div id="schedule-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3>📅 予定を追加</h3>
+      <form id="modal-schedule-form">
+        <div class="form-group">
+          <label>日付</label>
+          <input type="date" id="modal-schedule-date" required readonly style="background:#f0f0f0;">
+        </div>
+        <div class="form-group">
+          <label>予定・イベント名</label>
+          <input type="text" id="modal-schedule-title" placeholder="例：ツアー初日参戦" required>
+        </div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
+          <button type="button" class="secondary" onclick="closeScheduleModal()">キャンセル</button>
+          <button type="submit">保存する</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- Firebase SDK の読み込み -->
@@ -193,9 +294,11 @@
     let calendar = null;
 
     // DOM要素
+    const loadingScreen = document.getElementById('loading-screen');
     const loginSection = document.getElementById('login-section');
     const appSection = document.getElementById('app-section');
     const userNameEl = document.getElementById('user-name');
+    const scheduleModal = document.getElementById('schedule-modal');
 
     document.getElementById('login-btn').addEventListener('click', () => signInWithPopup(auth, provider));
     document.getElementById('logout-btn').addEventListener('click', () => {
@@ -203,8 +306,12 @@
       signOut(auth);
     });
 
+    // 認証状態の監視
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
+      // ロード画面を非表示
+      loadingScreen.classList.add('hidden');
+
       if (user) {
         userNameEl.textContent = user.displayName || "ユーザー";
         loginSection.classList.add('hidden');
@@ -222,12 +329,16 @@
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
       document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-      event.target.classList.add('active');
+      if (event && event.target) event.target.classList.add('active');
 
-      // カレンダー表示崩れ防止用のレンダリング
       if (tabName === 'calendar' && calendar) {
         setTimeout(() => calendar.render(), 50);
       }
+    };
+
+    // モーダル操作関数
+    window.closeScheduleModal = function() {
+      scheduleModal.classList.add('hidden');
     };
 
     // --- カレンダー初期化 ---
@@ -241,18 +352,13 @@
           center: 'title',
           right: ''
         },
-        // 日付をクリックした時の処理（予定追加）
-        dateClick: async function(info) {
-          const title = prompt(`${info.dateStr} の予定・イベント名を入力してください:`);
-          if (title && title.trim() !== "") {
-            await addDoc(collection(db, "users", currentUser.uid, "schedules"), {
-              date: info.dateStr,
-              title: title.trim(),
-              createdAt: serverTimestamp()
-            });
-          }
+        // 日付をクリックした時（モーダルを開く）
+        dateClick: function(info) {
+          document.getElementById('modal-schedule-date').value = info.dateStr;
+          document.getElementById('modal-schedule-title').value = '';
+          scheduleModal.classList.remove('hidden');
         },
-        // イベント（予定）をクリックした時の処理（削除）
+        // 予定をクリックした時（削除確認）
         eventClick: async function(info) {
           if (confirm(`予定「${info.event.title}」を削除しますか？`)) {
             await deleteDoc(doc(db, "users", currentUser.uid, "schedules", info.event.id));
@@ -262,21 +368,37 @@
       calendar.render();
     }
 
+    // --- モーダルフォームからの予定保存 ---
+    document.getElementById('modal-schedule-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const date = document.getElementById('modal-schedule-date').value;
+      const title = document.getElementById('modal-schedule-title').value;
+
+      await addDoc(collection(db, "users", currentUser.uid, "schedules"), {
+        date: date,
+        title: title,
+        createdAt: serverTimestamp()
+      });
+
+      closeScheduleModal();
+    });
+
     // --- データ全読み込み ---
     function loadAllData(userId) {
       unsubscribes.forEach(unsub => unsub());
       unsubscribes = [];
 
-      // グッズ読み込み
+      // 1. グッズ読み込み
       const qGoods = query(collection(db, "users", userId, "goods"), orderBy("createdAt", "desc"));
       unsubscribes.push(onSnapshot(qGoods, (snapshot) => {
+        document.getElementById('home-goods-count').textContent = snapshot.size;
         renderList('goods-list', snapshot, (data, id) => `
           <span><strong>${escapeHTML(data.name)}</strong> - ￥${data.price.toLocaleString()}</span>
           <button class="delete-btn" onclick="deleteItem('goods', '${id}')">削除</button>
         `);
       }));
 
-      // お金読み込み
+      // 2. お金読み込み
       const qMoney = query(collection(db, "users", userId, "expenses"), orderBy("createdAt", "desc"));
       unsubscribes.push(onSnapshot(qMoney, (snapshot) => {
         let total = 0;
@@ -288,27 +410,30 @@
           `;
         });
         document.getElementById('total-money').textContent = total.toLocaleString();
+        document.getElementById('home-total-money').textContent = total.toLocaleString();
       }));
 
-      // カレンダー（予定）読み込み & カレンダー上へ反映
-      const qSchedule = query(collection(db, "users", userId, "schedules"));
+      // 3. カレンダー（予定）読み込み
+      const qSchedule = query(collection(db, "users", userId, "schedules"), orderBy("date", "asc"));
       unsubscribes.push(onSnapshot(qSchedule, (snapshot) => {
-        if (!calendar) return;
-        
-        // 一度イベントをすべてクリア
-        calendar.removeAllEvents();
-
-        // Firestoreのデータをカレンダーイベントに変換して追加
-        snapshot.forEach(docSnap => {
-          const data = docSnap.data();
-          calendar.addEvent({
-            id: docSnap.id,
-            title: data.title,
-            start: data.date,
-            allDay: true,
-            color: '#e91e63' // 推しカラーのピンク
+        // カレンダー更新
+        if (calendar) {
+          calendar.removeAllEvents();
+          snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            calendar.addEvent({
+              id: docSnap.id,
+              title: data.title,
+              start: data.date,
+              allDay: true,
+              color: '#e91e63'
+            });
           });
-        });
+        }
+        // ホーム画面の直近の予定リスト更新
+        renderList('home-schedule-list', snapshot, (data) => `
+          <span><strong>${data.date}</strong> : ${escapeHTML(data.title)}</span>
+        `);
       }));
     }
 
