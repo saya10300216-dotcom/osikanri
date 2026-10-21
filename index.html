@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OshiBase - 距離感が選べる推し活ノート</title>
   
-  <!-- Google Fonts (Poppins & Noto Sans JP) -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
@@ -18,7 +18,6 @@
     :root {
       --primary-color: #ff4081;
       --primary-gradient: linear-gradient(135deg, #ff4081 0%, #ff80ab 100%);
-      --primary-hover: #f50057;
       --bg-color: #f4f5f9;
       --card-bg: #ffffff;
       --text-main: #2c3e50;
@@ -30,7 +29,7 @@
     }
 
     body {
-      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Noto Sans JP', -apple-system, sans-serif;
       max-width: 680px;
       margin: 0 auto;
       padding: 24px 16px 40px;
@@ -39,245 +38,105 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ヘッダーデザイン */
-    .app-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    .app-header { text-align: center; margin-bottom: 20px; }
     .app-title {
       font-family: 'Poppins', sans-serif;
       background: var(--primary-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-size: 28px;
-      font-weight: 700;
-      margin: 0;
-      letter-spacing: -0.5px;
+      font-size: 28px; font-weight: 700; margin: 0;
     }
-    .app-subtitle {
-      font-size: 12px;
-      color: var(--text-sub);
-      margin-top: 4px;
-    }
+    .app-subtitle { font-size: 12px; color: var(--text-sub); margin-top: 4px; }
 
-    /* カードコンテナ */
     .card {
       background: var(--card-bg);
       border-radius: var(--radius-lg);
-      padding: 20px;
-      margin-top: 16px;
+      padding: 20px; margin-top: 16px;
       box-shadow: var(--shadow-sm);
       border: 1px solid rgba(230, 230, 250, 0.6);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .card h3 {
-      font-size: 16px;
-      margin: 0 0 14px 0;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .card h3 { font-size: 16px; margin: 0 0 14px 0; display: flex; align-items: center; gap: 6px; }
 
-    /* ボタンデザイン */
     button {
       background: var(--primary-gradient);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 10px 18px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: var(--shadow-md);
-      transition: all 0.2s ease;
+      color: white; border: none; border-radius: var(--radius-sm);
+      padding: 10px 18px; font-size: 14px; font-weight: 700; cursor: pointer;
+      box-shadow: var(--shadow-md); transition: all 0.2s ease;
     }
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 20px rgba(255, 64, 129, 0.25);
-    }
-    button:active {
-      transform: translateY(0);
-    }
-    button.logout {
-      background: #eceff1;
-      color: #546e7a;
-      box-shadow: none;
-    }
-    button.logout:hover {
-      background: #cfd8dc;
-    }
-    button.secondary {
-      background: #e0e0e0;
-      color: #616161;
-      box-shadow: none;
-    }
+    button:hover { transform: translateY(-1px); }
+    button.logout { background: #eceff1; color: #546e7a; box-shadow: none; }
+    button.secondary { background: #e0e0e0; color: #616161; box-shadow: none; }
     button.delete-btn {
-      background: #ffebee;
-      color: #e53935;
-      padding: 4px 10px;
-      font-size: 12px;
-      border-radius: 6px;
-      box-shadow: none;
+      background: #ffebee; color: #e53935; padding: 4px 10px; font-size: 12px; border-radius: 6px; box-shadow: none;
     }
-    button.delete-btn:hover {
-      background: #e53935;
-      color: white;
-    }
+    button.delete-btn:hover { background: #e53935; color: white; }
     .hidden { display: none !important; }
 
-    /* フォーム要素 */
     .form-group { margin-bottom: 14px; }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 6px;
-      font-weight: 700;
-      color: #455a64;
-    }
+    .form-group label { display: block; font-size: 13px; margin-bottom: 6px; font-weight: 700; color: #455a64; }
     .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 10px 12px;
-      box-sizing: border-box;
-      border: 1.5px solid #e0e0e0;
-      border-radius: var(--radius-sm);
-      font-family: inherit;
-      font-size: 14px;
-      background: #fafafa;
-      transition: border-color 0.2s ease;
-    }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      background: #fff;
+      width: 100%; padding: 10px 12px; box-sizing: border-box;
+      border: 1.5px solid #e0e0e0; border-radius: var(--radius-sm);
+      font-family: inherit; font-size: 14px; background: #fafafa;
     }
 
-    /* リストデザイン */
+    /* アイコン選択ラジオボタン */
+    .icon-picker { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+    .icon-picker label { cursor: pointer; }
+    .icon-picker input { display: none; }
+    .icon-picker span {
+      font-size: 24px; padding: 6px 12px; border-radius: 12px; border: 2px solid #eee; display: inline-block;
+    }
+    .icon-picker input:checked + span { border-color: var(--primary-color); background: #ffe4ec; }
+
+    /* モード切り替えスイッチ */
+    .mode-switch-card {
+      display: flex; justify-content: space-between; align-items: center; background: #fff;
+      padding: 12px 16px; border-radius: 12px; border: 1.5px solid #e0e0e0; margin-top: 12px;
+    }
+    .mode-badge { font-size: 12px; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
+    .mode-solo { background: #e8f5e9; color: #2e7d32; }
+    .mode-share { background: #e3f2fd; color: #1565c0; }
+
     ul { list-style: none; padding: 0; margin: 0; }
-    li {
-      padding: 12px 0;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-    }
-    li:last-child { border-bottom: none; }
+    li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
 
-    /* ピル型タブメニュー */
     .tab-menu {
-      display: flex;
-      gap: 6px;
-      margin-top: 20px;
-      padding: 4px;
-      background: #eaedf1;
-      border-radius: 30px;
-      overflow-x: auto;
+      display: flex; gap: 6px; margin-top: 16px; padding: 4px; background: #eaedf1; border-radius: 30px; overflow-x: auto;
     }
     .tab-btn {
-      flex: 1;
-      background: none;
-      color: var(--text-sub);
-      border: none;
-      padding: 10px 14px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 13px;
-      white-space: nowrap;
-      box-shadow: none;
+      flex: 1; background: none; color: var(--text-sub); border: none; padding: 10px 14px;
+      border-radius: 20px; font-weight: 700; font-size: 13px; white-space: nowrap; box-shadow: none;
     }
-    .tab-btn.active {
-      background: var(--card-bg);
-      color: var(--primary-color);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+    .tab-btn.active { background: var(--card-bg); color: var(--primary-color); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
-    /* スプラッシュ画面 */
     #loading-screen {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
     }
     .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid var(--primary-color);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin-top: 16px;
+      width: 36px; height: 36px; border: 3px solid #f3f3f3; border-top: 3px solid var(--primary-color);
+      border-radius: 50%; animation: spin 0.8s linear infinite; margin-top: 16px;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* ダッシュボードサマリー */
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-top: 10px;
-    }
-    .summary-card {
-      background: linear-gradient(135deg, #fff5f8 0%, #ffe4ec 100%);
-      padding: 14px 16px;
-      border-radius: var(--radius-sm);
-    }
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 10px; }
+    .summary-card { background: linear-gradient(135deg, #fff5f8 0%, #ffe4ec 100%); padding: 14px 16px; border-radius: var(--radius-sm); }
     .summary-card h4 { margin: 0; font-size: 12px; color: #880e4f; opacity: 0.8; }
     .summary-card .val { font-size: 22px; font-weight: 700; color: #c2185b; margin-top: 4px; }
 
-    /* モーダル */
     .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(4px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 1000;
     }
-    .modal-content {
-      background: white;
-      padding: 24px;
-      border-radius: var(--radius-lg);
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    }
+    .modal-content { background: white; padding: 24px; border-radius: var(--radius-lg); width: 90%; max-width: 400px; }
 
-    /* 掲示板カード */
-    .post-item {
-      background: #fafafa;
-      border: 1px solid #eee;
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-    .post-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-sub);
-      margin-bottom: 8px;
-    }
-    .badge {
-      background: #e1f5fe;
-      color: #0288d1;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-weight: 700;
-    }
+    .post-item { background: #fafafa; border: 1px solid #eee; border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; }
+    .post-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-sub); margin-bottom: 8px; }
 
-    /* FullCalendar カスタマイズ */
     #calendar { max-width: 100%; margin: 0 auto; }
-    .fc { font-family: inherit; }
     .fc-toolbar-title { font-size: 15px !important; font-weight: bold; color: var(--text-main); }
     .fc-button-primary { background: var(--primary-gradient) !important; border: none !important; border-radius: 6px !important; }
-    .fc-daygrid-day:hover { background-color: #fff0f5; }
-    .fc-event { border-radius: 4px; padding: 2px 4px; font-size: 11px; }
   </style>
 </head>
 <body>
@@ -285,7 +144,7 @@
   <!-- ロード画面 -->
   <div id="loading-screen">
     <div class="app-title" style="font-size: 36px;">OshiBase 🌸</div>
-    <p style="color: var(--text-sub); font-size: 13px; margin-top: 8px;">推し活ノートを読み込み中...</p>
+    <p style="color: var(--text-sub); font-size: 13px; margin-top: 8px;">読み込み中...</p>
     <div class="spinner"></div>
   </div>
 
@@ -297,15 +156,63 @@
   <!-- ログイン前画面 -->
   <div id="login-section" class="card hidden" style="text-align: center; padding: 32px 20px;">
     <h2 style="margin-top: 0; font-size: 20px;">ようこそ OshiBase へ</h2>
-    <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 24px;">グッズ・出費・スケジュールを記録して<br>自分のペースで推し活を楽しみましょう。</p>
-    <button id="login-btn" style="width: 100%; max-width: 280px; padding: 12px;">Googleでログイン</button>
+    <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 24px;">まずはGoogleアカウントでログインしてください。</p>
+    <button id="login-btn" style="width: 100%; max-width: 280px;">Googleでログイン</button>
   </div>
 
-  <!-- ログイン後画面 -->
+  <!-- 初回プロフィール設定画面（新規ユーザー用） -->
+  <div id="profile-setup-section" class="card hidden">
+    <h3>👤 プロフィール設定</h3>
+    <p style="font-size: 12px; color: var(--text-sub);">ひろばで表示される匿名情報です（いつでも変更可能）。</p>
+    <form id="profile-form">
+      <div class="form-group">
+        <label>ニックネーム</label>
+        <input type="text" id="setup-nickname" placeholder="例：匿名オタク" required>
+      </div>
+      <div class="form-group">
+        <label>年代</label>
+        <select id="setup-age" required>
+          <option value="10代">10代</option>
+          <option value="20代" selected>20代</option>
+          <option value="30代">30代</option>
+          <option value="40代以上">40代以上</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>アイコン（推し色・絵文字）</label>
+        <div class="icon-picker">
+          <label><input type="radio" name="icon" value="🌸" checked><span>🌸</span></label>
+          <label><input type="radio" name="icon" value="💖"><span>💖</span></label>
+          <label><input type="radio" name="icon" value="💙"><span>💙</span></label>
+          <label><input type="radio" name="icon" value="💛"><span>💛</span></label>
+          <label><input type="radio" name="icon" value="💚"><span>💚</span></label>
+          <label><input type="radio" name="icon" value="💜"><span>💜</span></label>
+        </div>
+      </div>
+      <button type="submit" style="width: 100%; margin-top: 12px;">設定を保存してスタート</button>
+    </form>
+  </div>
+
+  <!-- ログイン後メイン画面 -->
   <div id="app-section" class="hidden">
-    <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px;">
-      <div style="font-size: 14px;">👋 ようこそ <strong id="user-name" style="color: var(--primary-color);">ユーザー</strong> さん</div>
-      <button id="logout-btn" class="logout">ログアウト</button>
+    <div class="card" style="padding: 14px 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 14px;">
+          <span id="user-icon-display" style="font-size: 18px;">🌸</span>
+          <strong id="user-nickname-display">ユーザー</strong>
+          <span id="user-age-display" style="font-size: 12px; color: var(--text-sub);">(20代)</span>
+        </div>
+        <button id="logout-btn" class="logout">ログアウト</button>
+      </div>
+
+      <!-- モード切り替えスイッチ -->
+      <div class="mode-switch-card">
+        <div>
+          <div style="font-size: 12px; font-weight: bold;" id="mode-title">🔒 ひっそりモード</div>
+          <div style="font-size: 11px; color: var(--text-sub);" id="mode-desc">自分だけの完全プライベートノート</div>
+        </div>
+        <button type="button" id="toggle-mode-btn" class="secondary" style="padding: 6px 12px; font-size: 12px;">モード変更</button>
+      </div>
     </div>
 
     <!-- メニュータブ -->
@@ -314,10 +221,10 @@
       <button class="tab-btn" onclick="switchTab('goods')">📦 グッズ</button>
       <button class="tab-btn" onclick="switchTab('money')">💰 お金</button>
       <button class="tab-btn" onclick="switchTab('calendar')">📅 カレンダー</button>
-      <button class="tab-btn" onclick="switchTab('community')">💬 ひろば</button>
+      <button class="tab-btn" id="tab-community-btn" onclick="switchTab('community')">💬 ひろば</button>
     </div>
 
-    <!-- 🏠 ホーム画面 -->
+    <!-- 🏠 ホーム -->
     <div id="tab-home" class="tab-content">
       <div class="card">
         <h3>🏠 今月のダッシュボード</h3>
@@ -338,14 +245,14 @@
       </div>
     </div>
 
-    <!-- 📦 グッズ管理タブ -->
+    <!-- 📦 グッズ -->
     <div id="tab-goods" class="tab-content hidden">
       <div class="card">
         <h3>📦 グッズ登録</h3>
         <form id="goods-form">
           <div class="form-group">
             <label>グッズ名</label>
-            <input type="text" id="goods-name" placeholder="例：缶バッジ、アクスタ" required>
+            <input type="text" id="goods-name" placeholder="例：アクスタ" required>
           </div>
           <div class="form-group">
             <label>価格 (円)</label>
@@ -360,7 +267,7 @@
       </div>
     </div>
 
-    <!-- 💰 お金の管理タブ -->
+    <!-- 💰 お金 -->
     <div id="tab-money" class="tab-content hidden">
       <div class="card">
         <h3>💰 推し活出費の記録</h3>
@@ -370,7 +277,7 @@
         <form id="money-form">
           <div class="form-group">
             <label>用途</label>
-            <input type="text" id="money-title" placeholder="例：ライブチケット代、遠征費" required>
+            <input type="text" id="money-title" placeholder="例：チケット代" required>
           </div>
           <div class="form-group">
             <label>金額 (円)</label>
@@ -385,7 +292,7 @@
       </div>
     </div>
 
-    <!-- 📅 カレンダータブ -->
+    <!-- 📅 カレンダー -->
     <div id="tab-calendar" class="tab-content hidden">
       <div class="card">
         <h3>📅 予定カレンダー</h3>
@@ -394,29 +301,16 @@
       </div>
     </div>
 
-    <!-- 💬 同年代ひろばタブ -->
+    <!-- 💬 ひろば -->
     <div id="tab-community" class="tab-content hidden">
       <div class="card">
-        <h3>💬 同年代ひろば（匿名掲示板）</h3>
-        <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 14px;">同年代のファンとゆるく情報共有できるスペースです。</p>
+        <h3>💬 同年代ひろば（共有モード限定）</h3>
+        <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 14px;">設定されたプロフィールのアイコン・年代で投稿されます。</p>
         
         <form id="post-form">
           <div class="form-group">
-            <label>年代</label>
-            <select id="post-age" required>
-              <option value="10代">10代</option>
-              <option value="20代" selected>20代</option>
-              <option value="30代">30代</option>
-              <option value="40代以上">40代以上</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>ニックネーム（匿名）</label>
-            <input type="text" id="post-nickname" placeholder="例：匿名オタク" required>
-          </div>
-          <div class="form-group">
-            <label>メッセージ</label>
-            <textarea id="post-message" rows="3" placeholder="例：今週末のライブ当たった！行く人楽しみましょう～" required></textarea>
+            <label>一言メッセージ</label>
+            <textarea id="post-message" rows="3" placeholder="例：ライブ当落発表ドキドキする..." required></textarea>
           </div>
           <button type="submit" style="width: 100%;">投稿する</button>
         </form>
@@ -430,7 +324,7 @@
 
   </div>
 
-  <!-- 予定追加モーダル -->
+  <!-- 予定モーダル -->
   <div id="schedule-modal" class="modal-overlay hidden">
     <div class="modal-content">
       <h3 style="margin-top: 0;">📅 予定を追加</h3>
@@ -441,7 +335,7 @@
         </div>
         <div class="form-group">
           <label>予定・イベント名</label>
-          <input type="text" id="modal-schedule-title" placeholder="例：ツアー初日参戦" required>
+          <input type="text" id="modal-schedule-title" placeholder="例：ツアー参戦" required>
         </div>
         <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
           <button type="button" class="secondary" onclick="closeScheduleModal()">キャンセル</button>
@@ -451,11 +345,11 @@
     </div>
   </div>
 
-  <!-- Firebase SDK の読み込み -->
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, getDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCMNWuczwSlFyUyB_GA6E8s0_5kX6OA6rY",
@@ -472,13 +366,14 @@
     const provider = new GoogleAuthProvider();
 
     let currentUser = null;
+    let userProfile = null;
     let unsubscribes = [];
     let calendar = null;
 
     const loadingScreen = document.getElementById('loading-screen');
     const loginSection = document.getElementById('login-section');
+    const profileSetupSection = document.getElementById('profile-setup-section');
     const appSection = document.getElementById('app-section');
-    const userNameEl = document.getElementById('user-name');
     const scheduleModal = document.getElementById('schedule-modal');
 
     document.getElementById('login-btn').addEventListener('click', () => signInWithPopup(auth, provider));
@@ -487,20 +382,79 @@
       signOut(auth);
     });
 
-    onAuthStateChanged(auth, (user) => {
+    // 認証監視
+    onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       loadingScreen.classList.add('hidden');
 
       if (user) {
-        userNameEl.textContent = user.displayName || "ユーザー";
         loginSection.classList.add('hidden');
-        appSection.classList.remove('hidden');
-        initCalendar();
-        loadAllData(user.uid);
+        
+        // Firestoreからユーザープロフ取得
+        const profileDoc = await getDoc(doc(db, "users", user.uid, "profile", "info"));
+        if (profileDoc.exists()) {
+          userProfile = profileDoc.data();
+          showAppMain();
+        } else {
+          // 未設定ならプロフ登録画面を表示
+          profileSetupSection.classList.remove('hidden');
+        }
       } else {
         loginSection.classList.remove('hidden');
         appSection.classList.add('hidden');
+        profileSetupSection.classList.add('hidden');
       }
+    });
+
+    // プロフィール保存
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nickname = document.getElementById('setup-nickname').value;
+      const age = document.getElementById('setup-age').value;
+      const icon = document.querySelector('input[name="icon"]:checked').value;
+
+      userProfile = { nickname, age, icon, mode: 'solo' }; // デフォルトはひっそり(solo)モード
+
+      await setDoc(doc(db, "users", currentUser.uid, "profile", "info"), userProfile);
+      profileSetupSection.classList.add('hidden');
+      showAppMain();
+    });
+
+    // メイン画面表示
+    function showAppMain() {
+      appSection.classList.remove('hidden');
+      updateProfileUI();
+      initCalendar();
+      loadAllData(currentUser.uid);
+    }
+
+    // UIへプロフ反映 & モード反映
+    function updateProfileUI() {
+      document.getElementById('user-icon-display').textContent = userProfile.icon || '🌸';
+      document.getElementById('user-nickname-display').textContent = userProfile.nickname || 'ユーザー';
+      document.getElementById('user-age-display').textContent = `(${userProfile.age || '20代'})`;
+
+      const modeTitle = document.getElementById('mode-title');
+      const modeDesc = document.getElementById('mode-desc');
+      const communityBtn = document.getElementById('tab-community-btn');
+
+      if (userProfile.mode === 'share') {
+        modeTitle.textContent = "🌐 共有モード（ひろば利用可能）";
+        modeDesc.textContent = "同年代のファンとゆるく共有中";
+        communityBtn.classList.remove('hidden');
+      } else {
+        modeTitle.textContent = "🔒 ひっそりモード";
+        modeDesc.textContent = "自分だけの完全プライベートノート";
+        communityBtn.classList.add('hidden');
+        switchTab('home'); // ひっそりモード時はホームへ戻す
+      }
+    }
+
+    // モード切り替えボタン
+    document.getElementById('toggle-mode-btn').addEventListener('click', async () => {
+      userProfile.mode = userProfile.mode === 'share' ? 'solo' : 'share';
+      await setDoc(doc(db, "users", currentUser.uid, "profile", "info"), userProfile);
+      updateProfileUI();
     });
 
     window.switchTab = function(tabName) {
@@ -598,7 +552,7 @@
         `);
       }));
 
-      // 4. 同年代ひろば
+      // 4. ひろば
       const qPosts = query(collection(db, "public_posts"), orderBy("createdAt", "desc"));
       unsubscribes.push(onSnapshot(qPosts, (snapshot) => {
         const postsEl = document.getElementById('posts-list');
@@ -617,7 +571,7 @@
 
           div.innerHTML = `
             <div class="post-header">
-              <span><span class="badge">${escapeHTML(data.age)}</span> <strong>${escapeHTML(data.nickname)}</strong></span>
+              <span>${escapeHTML(data.icon)} <strong>${escapeHTML(data.nickname)}</strong> (${escapeHTML(data.age)})</span>
               <span>${deleteBtnHtml}</span>
             </div>
             <div style="font-size:14px; line-height:1.5; white-space:pre-wrap;">${escapeHTML(data.message)}</div>
@@ -661,12 +615,14 @@
       e.target.reset();
     });
 
+    // ひろば投稿（プロフ情報を使用）
     document.getElementById('post-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       await addDoc(collection(db, "public_posts"), {
         authorId: currentUser.uid,
-        age: document.getElementById('post-age').value,
-        nickname: document.getElementById('post-nickname').value,
+        icon: userProfile.icon,
+        age: userProfile.age,
+        nickname: userProfile.nickname,
         message: document.getElementById('post-message').value,
         createdAt: serverTimestamp()
       });
