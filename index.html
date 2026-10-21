@@ -18,6 +18,122 @@
       font-size: 24px;
       margin-bottom: 8px;
     }
-    .subtitle {
-      color: #666;
-      font-size: 14
+    .card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #d81b60;
+    }
+    button.logout {
+      background-color: #757575;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>OshiBase 🌸</h1>
+
+  <!-- ログイン前画面 -->
+  <div id="login-section" class="card">
+    <h2>ようこそ</h2>
+    <p>自分だけの推し活ノート。まずはGoogleアカウントでログインしてください。</p>
+    <button id="login-btn">Googleでログイン</button>
+  </div>
+
+  <!-- ログイン後画面 -->
+  <div id="app-section" class="hidden">
+    <div class="card">
+      <p>ようこそ、<strong id="user-name">ユーザー</strong> さん！</p>
+      <button id="logout-btn" class="logout">ログアウト</button>
+    </div>
+
+    <div class="card">
+      <h3>📦 次に作る機能エリア</h3>
+      <p>ここに「グッズ管理」「お金の管理」「カレンダー」「同年代ひろば」を追加していきます！</p>
+    </div>
+  </div>
+
+  <!-- Firebase SDK の読み込み -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getAuth, 
+      GoogleAuthProvider, 
+      signInWithPopup, 
+      signOut, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // 1. Firebase設定
+    const firebaseConfig = {
+      apiKey: "AIzaSyCMNWuczwSlFyUyB_GA6E8s0_5kX6OA6rY",
+      authDomain: "oshikanri-47bbb.firebaseapp.com",
+      projectId: "oshikanri-47bbb",
+      storageBucket: "oshikanri-47bbb.firebasestorage.app",
+      messagingSenderId: "178705245984",
+      appId: "1:178705245984:web:74f49d610c4f91348dd945"
+    };
+
+    // 2. 初期化
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // DOM要素
+    const loginSection = document.getElementById('login-section');
+    const appSection = document.getElementById('app-section');
+    const userNameEl = document.getElementById('user-name');
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // 3. ログイン処理
+    loginBtn.addEventListener('click', async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error("ログインエラー詳細:", error);
+        alert("ログインエラーが発生しました:\n" + error.message);
+      }
+    });
+
+    // 4. ログアウト処理
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error("ログアウトエラー:", error);
+      }
+    });
+
+    // 5. 状態監視
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userNameEl.textContent = user.displayName || "ユーザー";
+        loginSection.classList.add('hidden');
+        appSection.classList.remove('hidden');
+      } else {
+        loginSection.classList.remove('hidden');
+        appSection.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
