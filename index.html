@@ -62,7 +62,10 @@
     /* フォームとリスト */
     .form-group { margin-bottom: 12px; }
     .form-group label { display: block; font-size: 14px; margin-bottom: 4px; font-weight: bold; }
-    .form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;
+      font-family: inherit;
+    }
     ul { list-style: none; padding: 0; margin: 0; }
     li { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
     
@@ -71,7 +74,7 @@
     .tab-btn { background: none; color: #666; border: none; padding: 8px 12px; border-radius: 0; font-weight: bold; white-space: nowrap; }
     .tab-btn.active { color: var(--primary-color); border-bottom: 3px solid var(--primary-color); }
     
-    /* 1. ロード画面（スプラッシュ画面） */
+    /* ロード画面（スプラッシュ画面） */
     #loading-screen {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -83,8 +86,7 @@
       z-index: 9999;
     }
     .spinner {
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       border: 4px solid #f3f3f3;
       border-top: 4px solid var(--primary-color);
       border-radius: 50%;
@@ -93,7 +95,7 @@
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* 2. ホーム画面サマリーカード */
+    /* ホーム画面サマリーカード */
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -109,7 +111,7 @@
     .summary-card h4 { margin: 0; font-size: 12px; color: #666; }
     .summary-card .val { font-size: 20px; font-weight: bold; color: var(--primary-color); margin-top: 4px; }
 
-    /* 3. モーダル画面（予定追加ポップアップ） */
+    /* モーダル画面（予定追加ポップアップ） */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -126,6 +128,29 @@
       width: 90%;
       max-width: 400px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* 掲示板スタイリング */
+    .post-item {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+    .badge {
+      background: #e1f5fe;
+      color: #0288d1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
     }
 
     /* FullCalendar */
@@ -167,9 +192,10 @@
       <button class="tab-btn" onclick="switchTab('goods')">📦 グッズ</button>
       <button class="tab-btn" onclick="switchTab('money')">💰 お金</button>
       <button class="tab-btn" onclick="switchTab('calendar')">📅 カレンダー</button>
+      <button class="tab-btn" onclick="switchTab('community')">💬 同年代ひろば</button>
     </div>
 
-    <!-- 🏠 2. ホーム画面 -->
+    <!-- 🏠 ホーム画面 -->
     <div id="tab-home" class="tab-content">
       <div class="card">
         <h3>🏠 今月のダッシュボード</h3>
@@ -246,9 +272,43 @@
       </div>
     </div>
 
+    <!-- 💬 同年代ひろばタブ（加点・独自性機能） -->
+    <div id="tab-community" class="tab-content hidden">
+      <div class="card">
+        <h3>💬 同年代ひろば（匿名掲示板）</h3>
+        <p style="font-size: 12px; color: #666;">同年代のファンとゆるく情報を共有できるスペースです。※個人情報は書かないでください。</p>
+        
+        <form id="post-form" style="margin-top: 12px;">
+          <div class="form-group">
+            <label>年代</label>
+            <select id="post-age" required>
+              <option value="10代">10代</option>
+              <option value="20代" selected>20代</option>
+              <option value="30代">30代</option>
+              <option value="40代以上">40代以上</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>ニックネーム（匿名）</label>
+            <input type="text" id="post-nickname" placeholder="例：匿名オタク" required>
+          </div>
+          <div class="form-group">
+            <label>メッセージ</label>
+            <textarea id="post-message" rows="3" placeholder="例：今週末のライブ当選しました！行く方楽しみましょう～" required></textarea>
+          </div>
+          <button type="submit">一言投稿する</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>最新の投稿一覧</h3>
+        <div id="posts-list">読み込み中...</div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- 📝 3. 予定入力画面（モーダルダイアログ） -->
+  <!-- 📝 予定入力画面（モーダルダイアログ） -->
   <div id="schedule-modal" class="modal-overlay hidden">
     <div class="modal-content">
       <h3>📅 予定を追加</h3>
@@ -309,7 +369,6 @@
     // 認証状態の監視
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
-      // ロード画面を非表示
       loadingScreen.classList.add('hidden');
 
       if (user) {
@@ -336,7 +395,6 @@
       }
     };
 
-    // モーダル操作関数
     window.closeScheduleModal = function() {
       scheduleModal.classList.add('hidden');
     };
@@ -347,18 +405,12 @@
       calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         locale: 'ja',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: ''
-        },
-        // 日付をクリックした時（モーダルを開く）
+        headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
         dateClick: function(info) {
           document.getElementById('modal-schedule-date').value = info.dateStr;
           document.getElementById('modal-schedule-title').value = '';
           scheduleModal.classList.remove('hidden');
         },
-        // 予定をクリックした時（削除確認）
         eventClick: async function(info) {
           if (confirm(`予定「${info.event.title}」を削除しますか？`)) {
             await deleteDoc(doc(db, "users", currentUser.uid, "schedules", info.event.id));
@@ -368,27 +420,23 @@
       calendar.render();
     }
 
-    // --- モーダルフォームからの予定保存 ---
+    // モーダルからの予定追加
     document.getElementById('modal-schedule-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const date = document.getElementById('modal-schedule-date').value;
-      const title = document.getElementById('modal-schedule-title').value;
-
       await addDoc(collection(db, "users", currentUser.uid, "schedules"), {
-        date: date,
-        title: title,
+        date: document.getElementById('modal-schedule-date').value,
+        title: document.getElementById('modal-schedule-title').value,
         createdAt: serverTimestamp()
       });
-
       closeScheduleModal();
     });
 
-    // --- データ全読み込み ---
+    // --- 全データ読み込み ---
     function loadAllData(userId) {
       unsubscribes.forEach(unsub => unsub());
       unsubscribes = [];
 
-      // 1. グッズ読み込み
+      // 1. グッズ
       const qGoods = query(collection(db, "users", userId, "goods"), orderBy("createdAt", "desc"));
       unsubscribes.push(onSnapshot(qGoods, (snapshot) => {
         document.getElementById('home-goods-count').textContent = snapshot.size;
@@ -398,7 +446,7 @@
         `);
       }));
 
-      // 2. お金読み込み
+      // 2. お金
       const qMoney = query(collection(db, "users", userId, "expenses"), orderBy("createdAt", "desc"));
       unsubscribes.push(onSnapshot(qMoney, (snapshot) => {
         let total = 0;
@@ -413,10 +461,9 @@
         document.getElementById('home-total-money').textContent = total.toLocaleString();
       }));
 
-      // 3. カレンダー（予定）読み込み
+      // 3. カレンダー
       const qSchedule = query(collection(db, "users", userId, "schedules"), orderBy("date", "asc"));
       unsubscribes.push(onSnapshot(qSchedule, (snapshot) => {
-        // カレンダー更新
         if (calendar) {
           calendar.removeAllEvents();
           snapshot.forEach(docSnap => {
@@ -430,10 +477,38 @@
             });
           });
         }
-        // ホーム画面の直近の予定リスト更新
         renderList('home-schedule-list', snapshot, (data) => `
           <span><strong>${data.date}</strong> : ${escapeHTML(data.title)}</span>
         `);
+      }));
+
+      // 4. 同年代ひろば（加点：他ユーザー共有データ）
+      const qPosts = query(collection(db, "public_posts"), orderBy("createdAt", "desc"));
+      unsubscribes.push(onSnapshot(qPosts, (snapshot) => {
+        const postsEl = document.getElementById('posts-list');
+        postsEl.innerHTML = '';
+        if (snapshot.empty) {
+          postsEl.innerHTML = '<p style="color:#666;">まだ投稿はありません。</p>';
+          return;
+        }
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          const div = document.createElement('div');
+          div.className = 'post-item';
+          
+          // 本人の投稿なら削除ボタンを表示
+          const isMyPost = data.authorId === userId;
+          const deleteBtnHtml = isMyPost ? `<button class="delete-btn" onclick="deletePublicPost('${docSnap.id}')">削除</button>` : '';
+
+          div.innerHTML = `
+            <div class="post-header">
+              <span><span class="badge">${escapeHTML(data.age)}</span> <strong>${escapeHTML(data.nickname)}</strong></span>
+              <span>${deleteBtnHtml}</span>
+            </div>
+            <div style="font-size:14px; white-space:pre-wrap;">${escapeHTML(data.message)}</div>
+          `;
+          postsEl.appendChild(div);
+        });
       }));
     }
 
@@ -445,14 +520,14 @@
         el.innerHTML = '<li>データがありません</li>';
         return;
       }
-      snapshot.forEach(doc => {
+      snapshot.forEach(docSnap => {
         const li = document.createElement('li');
-        li.innerHTML = templateFunc(doc.data(), doc.id);
+        li.innerHTML = templateFunc(docSnap.data(), docSnap.id);
         el.appendChild(li);
       });
     }
 
-    // --- グッズ & 出費追加処理 ---
+    // --- グッズ & 出費追加 ---
     document.getElementById('goods-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       await addDoc(collection(db, "users", currentUser.uid, "goods"), {
@@ -473,15 +548,34 @@
       e.target.reset();
     });
 
-    // --- データ削除処理 ---
+    // --- 掲示板への新規投稿（加点機能） ---
+    document.getElementById('post-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await addDoc(collection(db, "public_posts"), {
+        authorId: currentUser.uid,
+        age: document.getElementById('post-age').value,
+        nickname: document.getElementById('post-nickname').value,
+        message: document.getElementById('post-message').value,
+        createdAt: serverTimestamp()
+      });
+      document.getElementById('post-message').value = '';
+    });
+
+    // --- 削除処理 ---
     window.deleteItem = async function(colName, docId) {
       if (confirm("本当に削除しますか？")) {
         await deleteDoc(doc(db, "users", currentUser.uid, colName, docId));
       }
     };
 
+    window.deletePublicPost = async function(docId) {
+      if (confirm("投稿を削除しますか？")) {
+        await deleteDoc(doc(db, "public_posts", docId));
+      }
+    };
+
     function escapeHTML(str) {
-      return str.replace(/[&<>'"]/g, tag => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[tag]||tag));
+      return str ? str.replace(/[&<>'"]/g, tag => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[tag]||tag)) : '';
     }
   </script>
 </body>
